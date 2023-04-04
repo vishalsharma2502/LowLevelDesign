@@ -1,33 +1,28 @@
 package com.vishal.splitwise.model.expense;
 
-import com.vishal.splitwise.model.ExpenseMetaData;
+import com.vishal.splitwise.model.ExpenseType;
 import com.vishal.splitwise.model.User;
-import com.vishal.splitwise.model.split.ExactSplit;
-import com.vishal.splitwise.model.split.Split;
-import lombok.Getter;
 
-import java.util.List;
+import java.time.OffsetDateTime;
+import java.util.Set;
 
-@Getter
-public class ExactExpense extends Expense {
-
-    public ExactExpense(Double amount, User paidBy, List<Split> splits, ExpenseMetaData metaData) {
-        super(amount, paidBy, splits, metaData);
+public class ExactExpense extends Expense{
+    public ExactExpense(String title, ExpenseType expenseType, String expenseGroupId, OffsetDateTime createdAt, Double amount, String paidBy, Set<User> userSet) {
+        super(title, expenseType, expenseGroupId, createdAt, amount, paidBy, userSet);
     }
 
     @Override
     public boolean validate() {
-        for(Split split: getSplits()){
-            if(!(split instanceof ExactSplit)){
-                return false;
-            }
+        if(getExpenseType() != ExpenseType.EXACT){
+            return false;
         }
         double totalAmount = getAmount();
         double sumSplitAmount = 0;
-        for(Split split: getSplits()){
-            ExactSplit exactSplit = (ExactSplit) split;
-            sumSplitAmount += exactSplit.getAmount();
-        }
-        return totalAmount == sumSplitAmount;
+//        for(Split split: getSplits()){
+//            ExactSplit exactSplit = (ExactSplit) split;
+//            sumSplitAmount += exactSplit.getAmount();
+//        }
+//        return totalAmount == sumSplitAmount;
+        return true;
     }
 }

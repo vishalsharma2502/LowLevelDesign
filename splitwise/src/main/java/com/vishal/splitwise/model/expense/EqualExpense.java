@@ -1,24 +1,21 @@
 package com.vishal.splitwise.model.expense;
 
-import com.vishal.splitwise.model.ExpenseMetaData;
+import com.vishal.splitwise.model.ExpenseType;
 import com.vishal.splitwise.model.User;
-import com.vishal.splitwise.model.split.EqualSplit;
-import com.vishal.splitwise.model.split.Split;
 
-import java.util.List;
+import java.time.OffsetDateTime;
+import java.util.Set;
 
 public class EqualExpense extends Expense {
 
-    public EqualExpense(Double amount, User paidBy, List<Split> splits, ExpenseMetaData metaData) {
-        super(amount, paidBy, splits, metaData);
+    public EqualExpense(String title, ExpenseType expenseType, String expenseGroupId, OffsetDateTime createdAt, Double amount, String paidBy, Set<User> userSet) {
+        super(title, expenseType, expenseGroupId, createdAt, amount, paidBy, userSet);
     }
 
     @Override
     public boolean validate() {
-        for(Split split: getSplits()){
-            if(!(split instanceof EqualSplit)){
-                return false;
-            }
+        if(ExpenseType.EQUAL != getExpenseType()){
+            return false;
         }
         return true;
     }
